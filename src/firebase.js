@@ -1,7 +1,6 @@
 // Replace with your Firebase config
 // Get this from the Firebase console (Web app config)
 import { initializeApp } from 'firebase/app';
-// import { getAnalytics } from "firebase/analytics";
 import {
   getFirestore,
   collection,
@@ -12,6 +11,12 @@ import {
   doc,
   updateDoc
 } from 'firebase/firestore';
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut
+} from 'firebase/auth';
 
 // const firebaseConfig = {
 //   apiKey: 'YOUR_API_KEY',
@@ -33,18 +38,21 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
-
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 export {
   db,
+  auth,
   collection,
   addDoc,
   getDocs,
   query,
   orderBy,
   doc,
-  updateDoc
+  updateDoc,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut
 };
 
