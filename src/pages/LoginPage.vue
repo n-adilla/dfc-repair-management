@@ -73,13 +73,31 @@ async function onSubmit() {
 </script>
 
 <style scoped>
+/* Page Background */
 .login-page {
   background: #f5f7fa;
+  min-height: 100vh;
+  padding: 1rem;
 }
+
+/* Card Styling */
 .login-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 400px; /* desktop max width */
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive Text & Spacing */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 1rem;
+  }
+  .text-h6 {
+    font-size: 1.2rem;
+  }
+  .text-body2 {
+    font-size: 0.85rem;
+  }
 }
 </style>

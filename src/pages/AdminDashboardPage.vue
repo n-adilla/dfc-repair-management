@@ -1,7 +1,8 @@
 <template>
   <q-page padding class="admin-page">
+    <!-- Dashboard Cards -->
     <div class="row q-col-gutter-md">
-      <div class="col-12 col-md-4">
+      <div class="col-12 col-md-4 q-mb-md">
         <q-card flat class="admin-card">
           <q-card-section>
             <div class="text-h6 text-primary">New inquiries</div>
@@ -16,7 +17,7 @@
         </q-card>
       </div>
 
-      <div class="col-12 col-md-4">
+      <div class="col-12 col-md-4 q-mb-md">
         <q-card flat class="admin-card">
           <q-card-section>
             <div class="text-h6 text-primary">Active repairs</div>
@@ -31,7 +32,7 @@
         </q-card>
       </div>
 
-      <div class="col-12 col-md-4">
+      <div class="col-12 col-md-4 q-mb-md">
         <q-card flat class="admin-card">
           <q-card-section>
             <div class="text-h6 text-primary">Completed repairs</div>
@@ -47,6 +48,7 @@
       </div>
     </div>
 
+    <!-- Recent Activity -->
     <div class="q-mt-lg">
       <q-card flat class="admin-card">
         <q-card-section>
@@ -56,7 +58,7 @@
           </div>
         </q-card-section>
         <q-separator />
-        <q-card-section>
+        <q-card-section class="recent-activity-list">
           <q-list>
             <q-item v-for="item in recentActivity" :key="item.id">
               <q-item-section avatar>
@@ -78,16 +80,6 @@
     </div>
   </q-page>
 </template>
-
-<style scoped>
-.admin-page {
-  background: #f5f7fa;
-}
-.admin-card {
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-}
-</style>
 
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -139,3 +131,35 @@ onMounted(async () => {
 });
 </script>
 
+<style scoped>
+.admin-page {
+  background: #f5f7fa;
+  min-height: 100%;
+}
+
+/* Cards */
+.admin-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: 12px;
+}
+
+/* Recent activity list scroll on small screens */
+.recent-activity-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .text-h6 {
+    font-size: 1rem;
+  }
+  .text-h4 {
+    font-size: 1.5rem;
+  }
+  .text-subtitle2 {
+    font-size: 0.85rem;
+  }
+}
+</style>
