@@ -1,0 +1,32 @@
+# Node / Vite / Quasar
+node_modules
+dist
+dist-ssr
+*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+
+# Lockfiles (optional – uncomment one if you only use a single manager)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
