@@ -1,10 +1,10 @@
 <template>
-  <q-page padding>
+  <q-page padding class="admin-page">
     <div class="row q-col-gutter-md">
       <div class="col-12 col-md-4">
-        <q-card>
+        <q-card flat class="admin-card">
           <q-card-section>
-            <div class="text-h6">New inquiries</div>
+            <div class="text-h6 text-primary">New inquiries</div>
             <div class="text-subtitle2">Total customer inquiries</div>
           </q-card-section>
           <q-card-section>
@@ -17,9 +17,9 @@
       </div>
 
       <div class="col-12 col-md-4">
-        <q-card>
+        <q-card flat class="admin-card">
           <q-card-section>
-            <div class="text-h6">Active repairs</div>
+            <div class="text-h6 text-primary">Active repairs</div>
             <div class="text-subtitle2">In progress or pending</div>
           </q-card-section>
           <q-card-section>
@@ -32,9 +32,9 @@
       </div>
 
       <div class="col-12 col-md-4">
-        <q-card>
+        <q-card flat class="admin-card">
           <q-card-section>
-            <div class="text-h6">Completed repairs</div>
+            <div class="text-h6 text-primary">Completed repairs</div>
             <div class="text-subtitle2">Finished repair jobs</div>
           </q-card-section>
           <q-card-section>
@@ -48,9 +48,9 @@
     </div>
 
     <div class="q-mt-lg">
-      <q-card>
+      <q-card flat class="admin-card">
         <q-card-section>
-          <div class="text-h6">Recent activity</div>
+          <div class="text-h6 text-primary">Recent activity</div>
           <div class="text-subtitle2">
             Latest inquiries and repair job updates
           </div>
@@ -78,6 +78,16 @@
     </div>
   </q-page>
 </template>
+
+<style scoped>
+.admin-page {
+  background: #f5f7fa;
+}
+.admin-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+</style>
 
 <script setup>
 import { ref, onMounted } from 'vue';

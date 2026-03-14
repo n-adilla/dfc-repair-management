@@ -1,11 +1,13 @@
 <template>
-  <q-page padding class="flex flex-center bg-grey-2">
-    <q-card style="width: 100%; max-width: 400px">
-      <q-card-section>
-        <div class="text-h6">Admin Login</div>
-        <div class="text-subtitle2">Sign in to manage inquiries and repairs.</div>
+  <q-page class="flex flex-center login-page">
+    <q-card class="login-card" flat>
+      <q-card-section class="q-pb-none">
+        <div class="text-h6 text-weight-medium text-primary">Admin sign in</div>
+        <div class="text-body2 text-grey-7">
+          Sign in to manage repair inquiries and jobs.
+        </div>
       </q-card-section>
-      <q-separator />
+      <q-separator class="q-my-md" />
       <q-card-section>
         <q-form @submit.prevent="onSubmit" class="q-gutter-md">
           <q-input
@@ -26,10 +28,11 @@
           />
           <div class="row justify-end q-gutter-sm">
             <q-btn
-              label="Login"
+              label="Sign in"
               color="primary"
               type="submit"
               :loading="loading"
+              no-caps
             />
           </div>
         </q-form>
@@ -61,7 +64,7 @@ async function onSubmit() {
     console.error(err);
     $q.notify({
       type: 'negative',
-      message: 'Login failed. Check email/password.'
+      message: 'Login failed. Check email and password.'
     });
   } finally {
     loading.value = false;
@@ -69,3 +72,14 @@ async function onSubmit() {
 }
 </script>
 
+<style scoped>
+.login-page {
+  background: #f5f7fa;
+}
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+</style>

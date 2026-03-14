@@ -1,6 +1,6 @@
 <template>
-  <q-page padding>
-    <q-card>
+  <q-page padding class="admin-page">
+    <q-card flat class="admin-card">
       <q-card-section class="row items-center justify-between">
         <div>
           <div class="text-h6">Repair Jobs</div>
@@ -216,4 +216,14 @@ onMounted(() => {
   loadJobs();
 });
 </script>
+
+<style scoped>
+.admin-page {
+  background: #f5f7fa;
+}
+.admin-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+</style>
 
