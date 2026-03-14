@@ -1,89 +1,115 @@
 <template>
   <q-page class="inquiry-page">
+    <!-- Hero Section -->
     <section class="hero">
       <div class="hero-content">
-        <h1 class="hero-title">Camera repair & service</h1>
+        <img src="@/assets/digitalfix-logo.png" alt="DigitalFix Logo" class="hero-icon" />
+        <h1 class="hero-title">Need it fixed?</h1>
         <p class="hero-subtitle">
-          Submit your repair request and we’ll get back to you quickly.
+          Submit your service or repair request and we’ll handle your devices with care.
         </p>
+        <q-btn
+          color="orange-8"
+          label="Submit a Request"
+          unelevated
+          class="hero-btn"
+          @click="scrollToForm"
+        />
       </div>
     </section>
 
-    <section class="form-section">
+    <!-- Form Section -->
+    <section ref="formSection" class="form-section" :class="{ 'animate-in': animateForm }">
       <q-card class="form-card q-pa-lg">
-        <q-card-section class="q-pb-none">
-          <div class="text-h6 text-weight-medium form-title">Request a repair</div>
-          <div class="text-body2 text-grey-7">
-            Fill in the details below. We’ll contact you to confirm and arrange drop-off.
-          </div>
-        </q-card-section>
-        <q-separator class="q-my-md" />
+        <!-- Background illustration watermark -->
+        <div class="form-bg-illustration"></div>
+
         <q-card-section>
           <q-form @submit.prevent="onSubmit" class="q-gutter-md">
-            <div class="row q-col-gutter-md">
+            <!-- Name & Phone -->
+            <div class="row q-col-gutter-md form-row" style="--delay: 0s;">
               <div class="col-12 col-sm-6">
                 <q-input
                   v-model="form.name"
-                  label="Your name"
+                  label="Full Name"
                   dense
                   outlined
                   required
-                  class="input-field"
+                  clearable
+                  filled
+                  class="form-input"
                 />
               </div>
               <div class="col-12 col-sm-6">
                 <q-input
                   v-model="form.phone"
-                  label="Phone number"
+                  label="Phone Number"
                   dense
                   outlined
                   required
-                  class="input-field"
+                  clearable
+                  filled
+                  class="form-input"
                 />
               </div>
             </div>
-            <div class="row q-col-gutter-md">
+
+            <!-- Camera Details -->
+            <div class="row q-col-gutter-md form-row" style="--delay: 0.1s;">
               <div class="col-12 col-sm-6">
                 <q-input
                   v-model="form.cameraBrand"
-                  label="Camera brand"
+                  label="Camera Brand"
                   dense
                   outlined
                   required
-                  class="input-field"
+                  filled
+                  class="form-input"
                 />
               </div>
               <div class="col-12 col-sm-6">
                 <q-input
                   v-model="form.cameraModel"
-                  label="Camera model"
+                  label="Camera Model"
                   dense
                   outlined
                   required
-                  class="input-field"
+                  filled
+                  class="form-input"
                 />
               </div>
             </div>
-            <q-input
-              v-model="form.issueDescription"
-              label="Describe the issue"
-              type="textarea"
-              outlined
-              autogrow
-              required
-              rows="3"
-              class="input-field"
-            />
-            <q-select
-              v-model="form.preferredLocation"
-              :options="locationOptions"
-              label="Preferred drop-off location"
-              dense
-              outlined
-              class="input-field"
-            />
 
-            <div class="row justify-end q-gutter-sm q-pt-sm">
+            <!-- Issue Description -->
+            <div class="row q-col-gutter-md form-row" style="--delay: 0.2s;">
+              <q-input
+                v-model="form.issueDescription"
+                label="Describe the issue"
+                type="textarea"
+                outlined
+                autogrow
+                required
+                rows="4"
+                filled
+                class="form-input"
+              />
+            </div>
+
+            <!-- Preferred Location -->
+            <div class="row q-col-gutter-md form-row" style="--delay: 0.3s;">
+              <q-select
+                v-model="form.preferredLocation"
+                :options="locationOptions"
+                label="Preferred drop-off location"
+                dense
+                outlined
+                filled
+                class="form-input"
+              />
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="row justify-end form-actions form-row" style="--delay: 0.4s;">
               <q-btn
                 label="Clear"
                 flat
@@ -92,11 +118,12 @@
                 :disable="loading"
               />
               <q-btn
-                label="Submit request"
-                color="primary"
+                label="Submit Request"
+                color="orange-8"
                 type="submit"
                 :loading="loading"
                 no-caps
+                unelevated
                 class="submit-btn"
               />
             </div>
@@ -108,11 +135,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import { createInquiry } from '@/services/inquiriesService';
 
 const $q = useQuasar();
+const formSection = ref(null);
+const animateForm = ref(false); // triggers animation once
 
 const form = ref({
   name: '',
@@ -123,7 +152,12 @@ const form = ref({
   preferredLocation: null
 });
 
-const locationOptions = ['Main Branch', 'Mall Kiosk', 'Pickup Service'];
+const locationOptions = [
+  'Seremban',
+  'Ampang (Ampang Saujana/Lembah Jaya)',
+  'Pickup Service (Seremban and Klang Valley only)'
+];
+
 const loading = ref(false);
 
 function onReset() {
@@ -140,16 +174,7 @@ function onReset() {
 async function onSubmit() {
   try {
     loading.value = true;
-    const payload = {
-      name: form.value.name,
-      phone: form.value.phone,
-      cameraBrand: form.value.cameraBrand,
-      cameraModel: form.value.cameraModel,
-      issueDescription: form.value.issueDescription,
-      preferredLocation: form.value.preferredLocation
-    };
-
-    await createInquiry(payload);
+    await createInquiry({ ...form.value });
     $q.notify({ type: 'positive', message: 'Request submitted. We’ll be in touch soon.' });
     onReset();
   } catch (err) {
@@ -159,55 +184,156 @@ async function onSubmit() {
     loading.value = false;
   }
 }
+
+// Smooth scroll to form
+function scrollToForm() {
+  formSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Animate form once using Intersection Observer
+onMounted(() => {
+  if (!formSection.value) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateForm.value = true; // trigger animation
+          observer.disconnect(); // disconnect to animate only once
+        }
+      });
+    },
+    { threshold: 0.2 } // trigger when 20% of the form is visible
+  );
+
+  observer.observe(formSection.value);
+});
 </script>
 
 <style scoped>
 .inquiry-page {
   min-height: 100%;
-  background: #f5f7fa;
+  background: #f9fafb;
 }
+
+/* Hero section */
 .hero {
-  background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+  background: linear-gradient(135deg, #fff 0%, #fff 100%);
   color: #fff;
-  padding: 3rem 1.5rem;
+  padding: 4rem 1.5rem 2rem;
   text-align: center;
+  position: relative;
 }
-.hero-content {
-  max-width: 600px;
-  margin: 0 auto;
+.hero-icon {
+  width: 200px;
+  margin-bottom: 1rem;
+  opacity: 0.9;
 }
 .hero-title {
+  color: #000;
   margin: 0 0 0.5rem 0;
-  font-size: 1.75rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-size: 2.5rem;
+  font-weight: 700;
 }
 .hero-subtitle {
-  margin: 0;
-  font-size: 1rem;
-  opacity: 0.95;
+  color: #000;
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 1.5rem;
 }
+.hero-btn {
+  font-weight: 600;
+}
+
+/* Form section */
 .form-section {
-  padding: 2rem 1.5rem 3rem;
-  max-width: 640px;
+  padding: 3rem 1.5rem 4rem;
+  max-width: 720px;
   margin: 0 auto;
+  position: relative;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.6s ease;
 }
-.form-card {
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+.form-section.animate-in {
+  opacity: 1;
+  transform: translateY(0);
 }
-.form-title {
-  color: #0d47a1;
+
+/* Staggered animation for rows */
+.form-row {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlideUp 0.5s forwards;
+  animation-delay: var(--delay);
 }
-.submit-btn {
-  min-width: 140px;
-}
-@media (min-width: 600px) {
-  .hero {
-    padding: 4rem 2rem;
+
+@keyframes fadeSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+.form-card {
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  position: relative;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* Background illustration watermark */
+.form-bg-illustration {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 220px;
+  height: 220px;
+  background: url('/statics/camera-watermark.svg') no-repeat center;
+  background-size: contain;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.form-card q-card-section {
+  position: relative;
+  z-index: 1;
+}
+
+.submit-btn {
+  min-width: 160px;
+}
+
+/* Inputs */
+.form-input {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+.form-input textarea {
+  padding: 8px;
+}
+
+.input-field >>> .q-field__control {
+  background-color: #f9fafb !important;
+  border-radius: 8px;
+}
+
+/* Buttons row spacing */
+.form-actions {
+  margin-top: 24px;
+  gap: 8px;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
   .hero-title {
-    font-size: 2rem;
+    font-size: 2.75rem;
+  }
+  .hero-subtitle {
+    font-size: 1.25rem;
   }
 }
 </style>
