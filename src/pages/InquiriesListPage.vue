@@ -46,11 +46,21 @@
                 title="Open WhatsApp chat"
               />
               <q-btn
+                v-if="!props.row.convertedToJobId"
                 flat
                 size="sm"
                 icon="build"
                 @click="createJobFromInquiry(props.row)"
                 title="Create repair job"
+              />
+              <q-btn
+                v-else
+                flat
+                size="sm"
+                icon="check_circle"
+                color="positive"
+                disable
+                title="Already converted to repair job"
               />
               <q-btn
                 flat
@@ -102,7 +112,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
-import { getInquiries, updateInquiryStatus } from '@/services/inquiriesService';
+import { getInquiries, updateInquiryStatus, updateInquiry } from '@/services/inquiriesService';
 import { createJob } from '@/services/repairJobsService';
 
 const $q = useQuasar();
@@ -144,6 +154,10 @@ async function loadInquiries() {
 }
 
 async function createJobFromInquiry(inquiry) {
+  if (inquiry.convertedToJobId) {
+    $q.notify({ type: 'warning', message: 'This inquiry was already converted to a repair job.' });
+    return;
+  }
   try {
     const jobId = await createJob({
       inquiryId: inquiry.id,
@@ -153,10 +167,12 @@ async function createJobFromInquiry(inquiry) {
       issueDescription: inquiry.issueDescription,
       status: 'pending'
     });
+    await updateInquiry(inquiry.id, { convertedToJobId: jobId });
     $q.notify({
       type: 'positive',
       message: `Repair job created (ID: ${jobId}).`
     });
+    await loadInquiries();
   } catch (e) {
     console.error(e);
     $q.notify({ type: 'negative', message: 'Failed to create repair job.' });

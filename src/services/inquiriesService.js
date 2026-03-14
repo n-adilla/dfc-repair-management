@@ -35,4 +35,9 @@ export async function updateInquiryStatus(id, status) {
   await updateDoc(ref, { status, updatedAt: new Date() });
 }
 
+export async function updateInquiry(id, data) {
+  const ref = doc(db, INQUIRIES_COLLECTION, id);
+  await updateDoc(ref, { ...data, updatedAt: new Date() });
+}
+
 
