@@ -1,39 +1,19 @@
 import {
   db,
-  storage,
   collection,
   addDoc,
   getDocs,
   query,
   orderBy,
-  storageRef,
-  uploadBytes,
-  getDownloadURL,
   doc,
   updateDoc
 } from '@/firebase';
 
 const INQUIRIES_COLLECTION = 'inquiries';
 
-export async function createInquiry(payload, files) {
-  const uploadedFiles = [];
-
-  if (files && files.length) {
-    for (const file of files) {
-      const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-      const ref = storageRef(
-        storage,
-        `inquiries/${uniqueId}-${file.name}`
-      );
-      await uploadBytes(ref, file);
-      const url = await getDownloadURL(ref);
-      uploadedFiles.push({ name: file.name, url });
-    }
-  }
-
+export async function createInquiry(payload) {
   const docRef = await addDoc(collection(db, INQUIRIES_COLLECTION), {
     ...payload,
-    files: uploadedFiles,
     status: 'new',
     createdAt: new Date()
   });
