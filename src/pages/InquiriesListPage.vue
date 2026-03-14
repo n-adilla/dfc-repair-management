@@ -90,18 +90,6 @@
             <div class="text-caption text-grey-7">Dropoff location</div>
             <div>{{ selectedInquiry.preferredLocation || '-' }}</div>
           </div>
-          <div v-if="selectedInquiry.files?.length">
-            <div class="text-caption text-grey-7 q-mb-xs">Images</div>
-            <div class="row q-col-gutter-sm">
-              <div
-                v-for="file in selectedInquiry.files"
-                :key="file.url"
-                class="col-4"
-              >
-                <q-img :src="file.url" ratio="1" class="rounded-borders" />
-              </div>
-            </div>
-          </div>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Close" v-close-popup />

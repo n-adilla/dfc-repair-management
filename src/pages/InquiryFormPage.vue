@@ -50,17 +50,6 @@
             outlined
           />
 
-          <div>
-            <div class="text-caption q-mb-xs">Attach images (optional)</div>
-            <input
-              ref="fileInputRef"
-              type="file"
-              multiple
-              accept="image/*"
-              @change="onFilesSelected"
-            />
-          </div>
-
           <div class="row justify-end q-gutter-sm">
             <q-btn
               label="Reset"
@@ -99,14 +88,7 @@ const form = ref({
 });
 
 const locationOptions = ['Main Branch', 'Mall Kiosk', 'Pickup Service'];
-
-const files = ref([]);
-const fileInputRef = ref(null);
 const loading = ref(false);
-
-function onFilesSelected(event) {
-  files.value = Array.from(event.target.files || []);
-}
 
 function onReset() {
   form.value = {
@@ -117,10 +99,6 @@ function onReset() {
     issueDescription: '',
     preferredLocation: null
   };
-  files.value = [];
-  if (fileInputRef.value) {
-    fileInputRef.value.value = null;
-  }
 }
 
 async function onSubmit() {
@@ -135,7 +113,7 @@ async function onSubmit() {
       preferredLocation: form.value.preferredLocation
     };
 
-    await createInquiry(payload, files.value);
+    await createInquiry(payload);
     $q.notify({ type: 'positive', message: 'Inquiry submitted successfully.' });
     onReset();
   } catch (err) {
